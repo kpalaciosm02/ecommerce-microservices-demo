@@ -58,6 +58,17 @@ services:
       - /app/node_modules
     command: npm start
 
+  order-service:
+    build: ./order-service
+    ports:
+      - "5002:5002"
+    environment:
+      DATABASE_URL: postgresql://postgres:TVuOVT9uJw@postgres:5432/users_db
+      PORT: 5002
+    depends_on:
+      postgres:
+        condition: service_healthy
+
 volumes:
   postgres_data:
   mongodb_data:
