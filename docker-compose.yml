@@ -1,10 +1,8 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:15
     environment:
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: TVuOVT9uJw
       POSTGRES_DB: users_db
     ports:
       - "5432:5432"
@@ -21,7 +19,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      DATABASE_URL: postgresql://postgres:password@postgres:5432/users_db
+      DATABASE_URL: postgresql://postgres:TVuOVT9uJw@postgres:5432/users_db
     depends_on:
       postgres:
         condition: service_healthy
@@ -29,5 +27,37 @@ services:
       - ./user-service:/app
     command: python app.py
 
+  mongodb:
+    image: mongo:7.0
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: products_user
+      MONGO_INITDB_ROOT_PASSWORD: 04ZMwa20B6
+      MONGO_INITDB_DATABASE: products_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  product-service:
+    build: ./product-service
+    ports:
+      - "5001:5001"
+    environment:
+      MONGODB_URI: mongodb://products_user:04ZMwa20B6@mongodb:27017/products_db?authSource=admin
+      NODE_ENV: development
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    volumes:
+      - ./product-service:/app
+      - /app/node_modules
+    command: npm start
+
 volumes:
   postgres_data:
+  mongodb_data:
