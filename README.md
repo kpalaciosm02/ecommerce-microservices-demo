@@ -98,7 +98,7 @@ ecommerce-microservices-demo/
 
 1. **Clone the repository:**
 ```bash
-   git clone <repo-url>
+   git clone <repo-https://github.com/kpalaciosm02/ecommerce-microservices-demo>
    cd ecommerce-microservices-demo
 ```
 
@@ -120,17 +120,6 @@ ecommerce-microservices-demo/
    curl http://localhost:5002/health  # Order Service
 ```
 
-4. **Test the APIs:**
-```bash
-   # Create a user
-   curl -X POST http://localhost:5000/users \
-     -H "Content-Type: application/json" \
-     -d '{"name":"John Doe","email":"john@example.com"}'
-
-   # Get all users
-   curl http://localhost:5000/users
-```
-
 ### View Logs
 ```bash
 # All services
@@ -150,6 +139,14 @@ docker-compose down
 
 ## Database Access
 
+### Security Note
+
+Default credentials are hardcoded for demonstration purposes:
+- PostgreSQL: user `postgres`, password `TVuOVT9uJw`
+- MongoDB: user `products_user`, password `04ZMwa20B6`
+
+In production, use environment variables or secrets management (Kubernetes Secrets, AWS Secrets Manager, etc.)
+
 ### PostgreSQL
 ```bash
 # Connect to PostgreSQL container
@@ -164,7 +161,7 @@ SELECT * FROM "order";
 ### MongoDB
 ```bash
 # Connect to MongoDB container
-docker exec -it <mongodb-container-id> mongosh
+docker exec -it <mongodb-container-id> mongosh -u products_user -p 04ZMwa20B6 --authenticationDatabase admin
 
 # View databases and collections
 show databases
