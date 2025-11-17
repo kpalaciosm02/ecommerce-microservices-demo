@@ -1,0 +1,2 @@
+kubernetes/*/secret*.yaml
+kubernetes/**/*secret*.yaml
